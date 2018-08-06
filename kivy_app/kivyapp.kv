@@ -13,8 +13,6 @@
         pos_hint: {'center_x': 0.5, 'top': 1}
 
     MyHexagon:
-        size_hint: 0.4, 0.4
-        pos_hint: {'center_x': 0.5, 'top': 0.75}
         canvas:
             Color:
                 rgba: 1, 1, 1, 1
@@ -22,7 +20,7 @@
                 cap: 'none'
                 close: True
                 width: 2
-                points: self.give_points(root.width*0.5, root.height*0.3, root.width*0.1)
+                points: self.give_points(root.width*0.5, root.height*0.25, root.height*0.2, root.width*0.2)
 
     MySlider:
         size_hint: 0.9, 0.1

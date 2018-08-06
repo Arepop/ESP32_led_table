@@ -111,6 +111,7 @@ class MySpinner(Spinner):
 
 
 class MyHexagon(Widget):
+
     def on_touch_down(self, touch):
         pass
 
@@ -120,15 +121,22 @@ class MyHexagon(Widget):
     def on_touch_up(self, touch):
         pass
 
-    def give_points(self, x, y, r):
+    def give_points(self, x, y, h, w):
+        if h * 9/16 < w:
+            r = h * 9/16
+        else:
+            r = w
         x1, y1 = x, y + r
         x2, y2 = x + r*0.87, y + 0.5*r
         x3, y3 = x2, y2 - r
         x4, y4 = x, y - r
         x5, y5 = x - 0.87 * r, y - 0.5*r
         x6, y6 = x - 0.87*r, y5 + r
+        self.x = x
+        self.y = y
+        self.r = r
 
-        return x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6
+        return (x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6)
 
 
 class KivyAPP(App):
