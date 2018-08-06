@@ -2,9 +2,50 @@
 # File name: kivy_lang.py
 
 
-<FloatLayout>:
+<MyButton>:
+    size_hint: 0.15, 0.1
+    text_size_hint: 0.15
+
+<MainScreen>:
     MyColorWheel:
-        size_hint: 0.4, 0.4
+        id: myclw
+        size_hint: 1, 9/16
         pos_hint: {'center_x': 0.5, 'top': 1}
 
+    MyHexagon:
+        size_hint: 0.4, 0.4
+        pos_hint: {'center_x': 0.5, 'top': 0.75}
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Line:
+                cap: 'none'
+                close: True
+                width: 2
+                points: self.give_points(root.width*0.5, root.height*0.3, root.width*0.1)
 
+    MySlider:
+        size_hint: 0.9, 0.1
+        pos_hint: {'center_x': 0.5, 'top': 0.47}
+        min: 0
+        max: 255
+        value: 255
+
+    MyButton:
+        text: "On"
+        color: 0, 1, 0, 1
+        pos_hint: {'left': 1, 'bottom': 0}
+        on_press: self.on()
+
+    MyButton:
+        text: "Off"
+        color: 1, 0, 0, 1
+        pos_hint: {'right': 1, 'bottom': 0}
+        on_press: self.off()
+
+    MySpinner:
+        size_hint: 0.15, 0.1
+        pos_hint: {'center_x': 0.5, 'bottom': 0}
+        text: "Mode"
+        values: ["1", "2", "3"]
+        id: spinner_id
