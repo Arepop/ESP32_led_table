@@ -3,7 +3,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.colorpicker import ColorWheel, distance, rect_to_polar
-from math import pi, sqrt, asin
+from math import pi, sqrt, atan
 from kivy.uix.slider import Slider
 from colorsys import rgb_to_hsv, hsv_to_rgb
 from kivy.uix.spinner import Spinner
@@ -113,36 +113,50 @@ class MySpinner(Spinner):
 
 
 class MyHexagon(Widget):
-    objects = []
-    obj1, obj2, obj3, obj4, obj5, obj6 = [None]*6
+    obj_dict = {1: None, 2: None, 3: None, 4: None, 5: None, 6: None}
 
     def on_touch_down(self, touch):
         if not self.collide_point(*touch.pos):
             return
-        self.get_angle(touch)
-        self.side_pick(1, self.obj1)
+        angle = self.get_angle(touch)
+        if angle > 30 and angle < 90:
+            self.side_pick(1)
+
+        elif angle < 30 or angle > 330:
+            self.side_pick(2)
+
+        elif angle > 270 and angle < 330:
+            self.side_pick(3)
+
+        elif angle < 270 and angle > 210:
+            self.side_pick(4)
+
+        elif angle < 210 and angle > 150:
+            self.side_pick(5)
+
+        elif angle < 150 and angle > 90:
+            self.side_pick(6)
 
     def get_angle(self, touch):
         x, y = touch.pos
-        xc, yc, = self.li[x1, ]
-        print(x, y, x/y)
-        print(self.pos)
-        # self.angle = asin(x/y)*360/pi
-        # print(self.angle)
+        xc, yc, = self.li[0], (self.li[1] + self.li[7])/2
 
-    def side_pick(self, n, obj):
-        x, y, q, p = self.li[(n-1)*4:n*4]
-        if self.obj1 not in self.objects:
-            self.obj1 = InstructionGroup()
-            self.obj1.add(Color(1, 1, 0))
+        radius, angle = rect_to_polar([xc, yc], x, y)
+        angle = int(angle*180/pi)
+        return angle
 
-            self.obj1.add(Line(points=[x, y, q, p],
-                               width=4, close=True))
-            self.objects.append(self.obj1)
-            self.canvas.add(self.obj1)
+    def side_pick(self, n):
+        x, y, q, p = self.li[(2*n-2):n*2+2]
+        if self.obj_dict[n] is None:
+            self.obj_dict[n] = InstructionGroup()
+            self.obj_dict[n].add(Color(1, 1, 0))
+
+            self.obj_dict[n].add(Line(points=[x, y, q, p],
+                                      width=4, close=True))
+            self.canvas.add(self.obj_dict[n])
         else:
-            self.canvas.remove(self.obj1)
-            self.objects.remove(self.obj1)
+            self.canvas.remove(self.obj_dict[n])
+            self.obj_dict[n] = None
 
     def on_touch_move(self, touch):
         pass
@@ -164,7 +178,7 @@ class MyHexagon(Widget):
         self.x = x
         self.y = y
         self.r = r
-        self.li = [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6]
+        self.li = [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x1, y1]
 
         return self.li
 
