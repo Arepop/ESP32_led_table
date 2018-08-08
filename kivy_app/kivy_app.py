@@ -10,6 +10,7 @@ from kivy.uix.spinner import Spinner
 from kivy.graphics import Line, Color, InstructionGroup
 
 G_R, G_G, G_B, G_BR = 0, 0, 0, 255
+S_D = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1}
 
 
 def set_command(r, g, b, br):
@@ -137,6 +138,8 @@ class MyHexagon(Widget):
         elif angle < 150 and angle > 90:
             self.side_pick(6)
 
+        print(f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}')
+
     def get_angle(self, touch):
         x, y = touch.pos
         xc, yc, = self.li[0], (self.li[1] + self.li[7])/2
@@ -146,6 +149,7 @@ class MyHexagon(Widget):
         return angle
 
     def side_pick(self, n):
+        global S_D
         x, y, q, p = self.li[(2*n-2):n*2+2]
         if self.obj_dict[n] is None:
             self.obj_dict[n] = InstructionGroup()
@@ -154,7 +158,9 @@ class MyHexagon(Widget):
             self.obj_dict[n].add(Line(points=[x, y, q, p],
                                       width=4, close=True))
             self.canvas.add(self.obj_dict[n])
+            S_D[n] = 1
         else:
+            S_D[n] = 0
             self.canvas.remove(self.obj_dict[n])
             self.obj_dict[n] = None
 
