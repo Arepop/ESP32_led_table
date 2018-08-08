@@ -10,11 +10,12 @@ from kivy.uix.spinner import Spinner
 from kivy.graphics import Line, Color, InstructionGroup
 
 G_R, G_G, G_B, G_BR = 0, 0, 0, 255
-S_D = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1}
+S_D = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+S_C = f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}'
 
 
-def set_command(r, g, b, br):
-    print(f'{r}?{g}?{b}?{br}&')
+def set_command(sc, r, g, b, br):
+    print(f'{sc}?{r}?{g}?{b}?{br}&')
 
 
 def distance(pt1, pt2):
@@ -34,7 +35,7 @@ class MyColorWheel(ColorWheel):
         super(MyColorWheel, self).on__hsv(instance, value)
         G_R, G_G, G_B = (round(self.r * 255),
                          round(self.g * 255), round(self.b * 255))
-        set_command(G_R, G_G, G_B, G_BR)
+        set_command(S_C, G_R, G_G, G_B, G_BR)
 
     def on_touch_move(self, touch):
         if touch.grab_current is not self:
@@ -54,7 +55,7 @@ class MyColorWheel(ColorWheel):
         r, g, b = hsv_to_rgb(h, s, v)
         G_R, G_G, G_B = (round(r * 255),
                          round(g * 255), round(b * 255))
-        set_command(G_R, G_G, G_B, G_BR)
+        set_command(S_C, G_R, G_G, G_B, G_BR)
 
 
 class MySlider(Slider):
@@ -66,7 +67,7 @@ class MySlider(Slider):
         if touch.grab_current == self:
             self.value_pos = touch.pos
             G_BR = int(self.value)
-        set_command(G_R, G_G, G_B, G_BR)
+        set_command(S_C, G_R, G_G, G_B, G_BR)
 
     def on_touch_down(self, touch):
         global G_BR
@@ -94,7 +95,7 @@ class MySlider(Slider):
             touch.grab(self)
             self.value_pos = touch.pos
         G_BR = int(self.value)
-        set_command(G_R, G_G, G_B, G_BR)
+        set_command(S_C, G_R, G_G, G_B, G_BR)
 
 
 class MyButton(Button):
@@ -117,6 +118,7 @@ class MyHexagon(Widget):
     obj_dict = {1: None, 2: None, 3: None, 4: None, 5: None, 6: None}
 
     def on_touch_down(self, touch):
+        global S_C
         if not self.collide_point(*touch.pos):
             return
         angle = self.get_angle(touch)
@@ -138,7 +140,7 @@ class MyHexagon(Widget):
         elif angle < 150 and angle > 90:
             self.side_pick(6)
 
-        print(f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}')
+        S_C = f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}'
 
     def get_angle(self, touch):
         x, y = touch.pos
@@ -185,6 +187,9 @@ class MyHexagon(Widget):
         self.y = y
         self.r = r
         self.li = [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x1, y1]
+
+        for idx in range(1, 7):
+            self.side_pick(idx)
 
         return self.li
 
