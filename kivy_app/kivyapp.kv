@@ -7,12 +7,15 @@
     text_size_hint: 0.15
 
 <MainScreen>:
+    id: 'screen'
     MyColorWheel:
         id: myclw
         size_hint: 1, 9/16
         pos_hint: {'center_x': 0.5, 'top': 1}
 
     MyHexagon:
+        size_hint: 0.2*9/16, 0.2
+        pos_hint: {'center_x': 0.5, 'center_y': 0.25}
         canvas:
             Color:
                 rgba: 1, 1, 1, 1
