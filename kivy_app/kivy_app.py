@@ -8,6 +8,8 @@ from kivy.uix.slider import Slider
 from colorsys import rgb_to_hsv, hsv_to_rgb
 from kivy.uix.spinner import Spinner
 from kivy.graphics import Line, Color, InstructionGroup
+import socket
+import requests
 
 G_R, G_G, G_B, G_BR = 0, 0, 0, 255
 S_D = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
@@ -15,7 +17,14 @@ S_C = f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}'
 
 
 def set_command(sc, r, g, b, br):
-    print(f'{sc}?{r}?{g}?{b}?{br}&')
+    command = f'{sc}?{r}?{g}?{b}?{br}&'
+    url = f'http://127.0.0.1:8000/{command}'
+    try:
+        requests.get(url)
+    except Exception as e:
+        print('Sent')
+    except:
+        raise
 
 
 def distance(pt1, pt2):
@@ -187,9 +196,6 @@ class MyHexagon(Widget):
         self.y = y
         self.r = r
         self.li = [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x1, y1]
-
-        for idx in range(1, 7):
-            self.side_pick(idx)
 
         return self.li
 
