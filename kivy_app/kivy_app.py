@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
-from kivy.uix.colorpicker import ColorWheel, distance, rect_to_polar
+from kivy.uix.colorpicker import ColorWheel, rect_to_polar
 from math import pi, sqrt, atan
 from kivy.uix.slider import Slider
 from colorsys import rgb_to_hsv, hsv_to_rgb
@@ -25,10 +25,6 @@ def set_command(sc, r, g, b, br):
         print('Sent')
     except:
         raise
-
-
-def distance(pt1, pt2):
-    return sqrt((pt1[0] - pt2[0]) ** 2. + (pt1[1] - pt2[1]) ** 2.)
 
 
 class MainScreen(FloatLayout):
@@ -164,7 +160,7 @@ class MyHexagon(Widget):
         x, y, q, p = self.li[(2*n-2):n*2+2]
         if self.obj_dict[n] is None:
             self.obj_dict[n] = InstructionGroup()
-            self.obj_dict[n].add(Color(1, 1, 0))
+            self.obj_dict[n].add(Color(1, 1, 1))
 
             self.obj_dict[n].add(Line(points=[x, y, q, p],
                                       width=4, close=True))
