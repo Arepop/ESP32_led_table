@@ -163,31 +163,37 @@ class MySpinner(Spinner):
 class MyHexagon(Widget):
     def __init__(self, *args, **kwargs):
         super(MyHexagon, self).__init__(*args, **kwargs)
-
+        self.on = 0
         self.obj_dict = {1: None, 2: None, 3: None, 4: None, 5: None, 6: None}
 
     def on_touch_down(self, touch):
         global S_C
-        if not self.collide_point(*touch.pos):
-            return
-        angle = self.get_angle(touch)
-        if angle > 30 and angle < 90:
-            self.side_pick(1)
+        if not self.on and not self.collide_point(*touch.pos):
+            self.on = 1
+            for _ in range(1, 7):
+                self.side_pick(_)
+        else:
+            if not self.collide_point(*touch.pos):
+                return
+            angle = self.get_angle(touch)
+            if angle > 30 and angle < 90:
+                self.side_pick(1)
 
-        elif angle < 30 or angle > 330:
-            self.side_pick(2)
+            elif angle < 30 or angle > 330:
+                self.side_pick(2)
 
-        elif angle > 270 and angle < 330:
-            self.side_pick(3)
+            elif angle > 270 and angle < 330:
+                self.side_pick(3)
 
-        elif angle < 270 and angle > 210:
-            self.side_pick(4)
+            elif angle < 270 and angle > 210:
+                self.side_pick(4)
 
-        elif angle < 210 and angle > 150:
-            self.side_pick(5)
+            elif angle < 210 and angle > 150:
+                self.side_pick(5)
 
-        elif angle < 150 and angle > 90:
-            self.side_pick(6)
+            elif angle < 150 and angle > 90:
+                self.side_pick(6)
+            self.on = 1
 
         S_C = f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}'
 
