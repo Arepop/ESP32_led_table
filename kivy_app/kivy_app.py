@@ -8,21 +8,26 @@ from kivy.uix.slider import Slider
 from colorsys import rgb_to_hsv, hsv_to_rgb
 from kivy.uix.spinner import Spinner
 from kivy.graphics import Line, Color, InstructionGroup
+from kivy.uix.textinput import TextInput
 import socket
 import requests
+import re
 
 G_R, G_G, G_B, G_BR = 0, 0, 0, 255
 S_D = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
 S_C = f'{S_D[1]}{S_D[2]}{S_D[3]}{S_D[4]}{S_D[5]}{S_D[6]}'
+IP = f'127.0.0.1:8000'
 
 
-def set_command(sc, r, g, b, br):
-    command = f'{sc}?{r}?{g}?{b}?{br}&'
-    url = f'http://127.0.0.1:8000/{command}'
+def set_command(sc, r, g, b, br, m=0):
+    command = f'{sc}?{r}?{g}?{b}?{br}?{m}&'
+    url = f'http://{IP}/{command}'
     try:
-        requests.get(url)
+        # requests.get(url)
+        print(url)
     except Exception as e:
         print('Sent')
+        return url
     except:
         raise
 
@@ -30,6 +35,32 @@ def set_command(sc, r, g, b, br):
 class MainScreen(FloatLayout):
     def __init__(self, *args, **kwargs):
         super(MainScreen, self).__init__(*args, **kwargs)
+
+
+class MyTextInput(TextInput):
+    def __init__(self, *args, **kwargs):
+        global IP
+        super(MyTextInput, self).__init__(*args, **kwargs)
+        IP = self.text
+
+    def on_text(self, instance, value):
+        global IP
+        IP = str(self.text)
+
+    pat = re.compile('[^0-9]')
+
+    def insert_text(self, substring, from_undo=False):
+        pat = self.pat
+
+        if len(self.text.split('.')) > 3:
+            if ':' in self.text:
+                s = re.sub(pat, '', substring)
+            else:
+                s = ':'.join([re.sub(pat, '', s)
+                              for s in substring.split(':', 1)])
+        else:
+            s = '.'.join([re.sub(pat, '', s) for s in substring.split('.', 1)])
+        return super(MyTextInput, self).insert_text(s, from_undo=from_undo)
 
 
 class MyColorWheel(ColorWheel):
@@ -104,11 +135,21 @@ class MySlider(Slider):
 
 
 class MyButton(Button):
+    def __init__(self, *args, **kwargs):
+        super(MyButton, self).__init__(*args, **kwargs)
+
     def off(self):
-        print('off')
+        if S_C == '000000':
+            set_command('111111', '0', '0', '0', '0')
+        else:
+            set_command(S_C, '0', '0', '0', '0')
 
     def on(self):
-        print('on')
+        ''' Should restore last command '''
+        if S_C == '000000':
+            set_command('111111', '255', '255', '255', '255')
+        else:
+            set_command(S_C, '0', '0', '0', '0', '10')
 
 
 class MySpinner(Spinner):
@@ -116,11 +157,14 @@ class MySpinner(Spinner):
         self.text = "Mode"
         self.is_open = False
         self.data = data
-        print(self.data)
+        set_command('000000', '0', '0', '0', '0', self.data)
 
 
 class MyHexagon(Widget):
-    obj_dict = {1: None, 2: None, 3: None, 4: None, 5: None, 6: None}
+    def __init__(self, *args, **kwargs):
+        super(MyHexagon, self).__init__(*args, **kwargs)
+
+        self.obj_dict = {1: None, 2: None, 3: None, 4: None, 5: None, 6: None}
 
     def on_touch_down(self, touch):
         global S_C
