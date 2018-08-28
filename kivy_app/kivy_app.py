@@ -9,7 +9,6 @@ from colorsys import rgb_to_hsv, hsv_to_rgb
 from kivy.uix.spinner import Spinner
 from kivy.graphics import Line, Color, InstructionGroup
 from kivy.uix.textinput import TextInput
-import socket
 import requests
 import re
 
