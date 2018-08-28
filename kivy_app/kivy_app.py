@@ -53,7 +53,7 @@ class MyTextInput(TextInput):
     def __init__(self, *args, **kwargs):
         global IP
         super(MyTextInput, self).__init__(*args, **kwargs)
-        self.ip = self.scan('127.0.0.1', 7800)
+        self.ip = self.scan('192.168.0.1', 7800)
 
     def scan(self, gate, port=80):
         ip_for_scan = gate.split('.')
