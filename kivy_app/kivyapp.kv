@@ -12,7 +12,7 @@
     MyTextInput:
         pos_hint: {'center_x': 0.5, 'top': 1}
         size_hint: 1, 0.05
-        text: '192.168.0.30'
+        text: '127.0.0.1:7800'
         padding_x: [self.center[0] - self._get_text_width(max(self._lines, key=len), self.tab_width, self._label_cached) / 2.0, 0] if self.text else [self.center[0], 0]
         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
     MyColorWheel:
@@ -38,6 +38,8 @@
         min: 0
         max: 255
         value: 255
+        value_track: True
+        value_track_color: 1, 1, 0, 1
 
     MyButton:
         text: "On"

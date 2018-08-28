@@ -23,7 +23,8 @@ def set_command(sc, r, g, b, br, m=0):
     command = f'{sc}?{r}?{g}?{b}?{br}?{m}&'
     url = f'http://{IP}/{command}'
     try:
-        requests.get(url, timeout=0.01)
+        req = requests.request('GET', url, timeout=0.04)
+        print(req.reason)
     except Exception as e:
         print(e)
         return url
@@ -209,7 +210,7 @@ class MyHexagon(Widget):
         x, y, q, p = self.li[(2*n-2):n*2+2]
         if self.obj_dict[n] is None:
             self.obj_dict[n] = InstructionGroup()
-            self.obj_dict[n].add(Color(1, 1, 1))
+            self.obj_dict[n].add(Color(0, 1, 1))
 
             self.obj_dict[n].add(Line(points=[x, y, q, p],
                                       width=4, close=True))
