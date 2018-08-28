@@ -50,6 +50,7 @@ def do_connect():
 def get_command(soc):
     conn, addr = soc.accept()
     rq = str(conn.recv(512))
+    conn.send('ESP32')
     command = rq[rq.find('/')+1:rq.find('&')]
     conn.close()
     print(command)
@@ -104,7 +105,6 @@ def fire_effect(br):
 
 def update(np):
     soc = recive_socket()
-    from_mode = 0
     while True:
         try:
             command = get_command(soc)

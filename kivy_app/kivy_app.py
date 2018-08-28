@@ -23,10 +23,9 @@ def set_command(sc, r, g, b, br, m=0):
     command = f'{sc}?{r}?{g}?{b}?{br}?{m}&'
     url = f'http://{IP}/{command}'
     try:
-        # requests.get(url)
-        print(url)
+        requests.get(url, timeout=0.01)
     except Exception as e:
-        print('Sent')
+        print(e)
         return url
     except:
         raise
